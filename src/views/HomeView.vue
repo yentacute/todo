@@ -11,16 +11,22 @@
           <span>Add task</span>
         </button>
       </div>
-      <div class="todo__app-list" v-if="getDatabase.length">
-          <div class="todo__app-task-item" v-for="(item, key) in mainDataArr" :key="key">
-            <button>
-                <span class="task__item-name">{{item?.name}}</span>
-                <div class="task__item-description">{{item?.description}}</div>
-            </button>
+      <div class="todo__app-list" v-if="store.mainDataArr">
+          <div class="todo__app-task-item" v-for="(item, key) in store.mainDataArr" :key="key" @contextmenu="handleRightMenu($event, item.id)">
+                <div class="task__item-check">
+                  <input type="checkbox" class="form-check" v-if="item.status === 1" checked >
+                  <input type="checkbox" class="form-check" v-else>
+                </div>
+                <div class="task__item-content" :class="{'completed': item.status === 1}">
+                  <span class="task__item-name">{{item?.name}}</span>
+                  <div class="task__item-description" v-html="item?.description"></div>
+                </div>
           </div>
+          <RightMenuOptions />
       </div>
       <div class="todo__app-form">
         <Form :validation-schema="schema">
+          <input type="hidden" v-model="model.id">
           <Field name="name" type="text" placeholder="Task name" v-model="model.name"/>
           <ErrorMessage name="name" as="div" class="error-message mb-2"/>
           <Editor
@@ -52,27 +58,47 @@
 <script setup>
   import { ref, reactive, computed, onMounted, watch } from 'vue'
   import Editor from '@tinymce/tinymce-vue';
+  import { v4 as uuidv4 } from 'uuid';
   import { Form, Field, ErrorMessage } from 'vee-validate';
+  import RightMenuOptions from '../components/RightMenuOptions.vue'
   import * as yup from 'yup';
-  const dataArr = ref([]);
-  const mainDataArr = ref([]);
+  import { useTodoStore } from '../stores/todo';
+  const store = useTodoStore();
+  const dataArr = ref([
+    {
+      id: uuidv4(),
+      name: 'Task 1',
+      due_date: Date.now(),
+      description: 'Today have to complete',
+      status: 0
+    }
+  ]);
+
   const model = reactive({
+    id: uuidv4(),
     name: '',
     due_date: Date.now(),
     description: '',
     status: 0
   });
 
-  const getDatabase = () => {
-    const parseData = JSON.parse(localStorage.getItem('database'));
-    mainDataArr.value = parseData;
-  };
 
   const getDate = computed(() => {
     const d = new Date();
     return d.toDateString();
-  })
-  
+  });
+
+  const handleRightMenu = (event, id) => {
+    event.preventDefault();
+    store.showRightmenu = true;
+    store.currentId = id;
+    setTimeout(() => {
+      const rightMenu = document.querySelector('.right__menu-item');
+      rightMenu.style.left = event.x + 'px';
+      rightMenu.style.top = event.y + 'px';
+    }, 100);
+
+  }
   
   const schema = yup.object({
     name: yup.string().required('Mời nhập tên task'),
@@ -83,14 +109,19 @@
     event.preventDefault();
     dataArr.value.push(model);
     localStorage.setItem('database',  JSON.stringify(dataArr.value));
+    store.mainDataArr = JSON.parse(localStorage.getItem('database'));
   }
 
-  watch(dataArr.value, (value) => {
-    if(value) {
-      getDatabase();
-    }
+  onMounted(() => {
+    localStorage.setItem('database', JSON.stringify(store.mainDataArr));
+    document.addEventListener('mousedown', function(event) {
+      if(!event.target.classList.contains('right__menu-item')) {
+            if(event.which === 1) {
+                store.showRightmenu = false;
+            }
+        } 
+    })
   })
-
 </script>
 
 <style lang="scss">
@@ -177,7 +208,48 @@
       font-size: 14px;
     }
 
-    
+    .todo__app-list {
+      position: relative;
+    }
+
+    .todo__app-task-item {
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      cursor: pointer;
+
+      &:hover {
+          background-color: #eff6fc;
+        }
+
+      .task__item-check {
+        width: 5%;
+
+        input {
+          width: 15px;
+          height: 15px;
+        }
+      }
+
+      .task__item-content {
+        width: 95%;
+        font-size: 14px;
+        
+        &.completed >* {
+          text-decoration: line-through;
+        }
+
+        .task__item-description {
+          p {
+            margin-bottom: 5px;
+          }
+        }
+      }
+      
+    }
   }
 
 </style>
