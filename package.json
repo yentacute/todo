@@ -14,11 +14,15 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@tinymce/tinymce-vue": "^5.1.0",
+    "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "bootstrap-vue": "^2.23.1",
     "pinia": "^2.0.36",
+    "vee-validate": "^4.9.3",
     "vue": "^3.3.2",
-    "vue-router": "^4.2.0"
+    "vue-axios": "^3.5.2",
+    "vue-router": "^4.2.0",
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",

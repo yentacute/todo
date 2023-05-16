@@ -4,17 +4,25 @@
       <div class="todo__app-header">
         <div class="todo__app-header-title">
           <h2>To do List</h2>
-          <span>15th may, 2023</span>
+          <span class="d-block mb-2">{{ getDate}}</span>
         </div>
         <button class="btn btn-success btn-sm">
           <font-awesome-icon :icon="['fas', 'plus']" />
           <span>Add task</span>
         </button>
       </div>
-
+      <div class="todo__app-list" v-if="getDatabase.length">
+          <div class="todo__app-task-item" v-for="(item, key) in mainDataArr" :key="key">
+            <button>
+                <span class="task__item-name">{{item?.name}}</span>
+                <div class="task__item-description">{{item?.description}}</div>
+            </button>
+          </div>
+      </div>
       <div class="todo__app-form">
-        <form action="">
-          <input type="text" placeholder="Task name" v-model="model.name">
+        <Form :validation-schema="schema">
+          <Field name="name" type="text" placeholder="Task name" v-model="model.name"/>
+          <ErrorMessage name="name" as="div" class="error-message mb-2"/>
           <Editor
             api-key="mxlftmz0xjsd4q38wnir8pr3923pyx17rwbpf3a18r3dvg1f"
             :init="{
@@ -33,28 +41,58 @@
           </div>
           <div class="todo__app-action">
             <button class="btn btn-sm btn-secondary">Cancel</button>
-            <button type="submit" class="btn btn-sm btn-danger">Add task</button>
+            <button type="submit" class="btn btn-sm btn-danger" @click="addNewTask($event)">Add task</button>
           </div>
-        </form>
-       
+        </Form>
       </div>
     </div>
   </main>
 </template>
 
 <script setup>
-  import { ref, reactive } from 'vue'
-  import Editor from '@tinymce/tinymce-vue'
-
+  import { ref, reactive, computed, onMounted, watch } from 'vue'
+  import Editor from '@tinymce/tinymce-vue';
+  import { Form, Field, ErrorMessage } from 'vee-validate';
+  import * as yup from 'yup';
+  const dataArr = ref([]);
+  const mainDataArr = ref([]);
   const model = reactive({
     name: '',
+    due_date: Date.now(),
     description: '',
-    due_date: new Date()
+    status: 0
   });
 
+  const getDatabase = () => {
+    const parseData = JSON.parse(localStorage.getItem('database'));
+    mainDataArr.value = parseData;
+  };
+
+  const getDate = computed(() => {
+    const d = new Date();
+    return d.toDateString();
+  })
   
+  
+  const schema = yup.object({
+    name: yup.string().required('Mời nhập tên task'),
+  });
+
+
+  const addNewTask = (event) => {
+    event.preventDefault();
+    dataArr.value.push(model);
+    localStorage.setItem('database',  JSON.stringify(dataArr.value));
+  }
+
+  watch(dataArr.value, (value) => {
+    if(value) {
+      getDatabase();
+    }
+  })
 
 </script>
+
 <style lang="scss">
   .todo__app {
     .todo__app-header {
@@ -132,6 +170,11 @@
   
         }
       }
+    }
+
+    .error-message {
+      color: #db4c3f;
+      font-size: 14px;
     }
 
     
