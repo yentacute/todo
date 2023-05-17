@@ -7,6 +7,7 @@ export const useTodoStore = defineStore('todo', () => {
   const showRightmenu = ref(false);
   const itemObj = reactive({});
   const changeLanguage = ref(false);
+  const localStorageData = JSON.parse(localStorage.getItem('database'));
 
   const chooseDateConvert = (date) => {
     const d = new Date(date);
@@ -51,6 +52,7 @@ export const useTodoStore = defineStore('todo', () => {
     itemObj,
     convertIsoStringDate,
     convertNowToIsoString,
-    changeLanguage
+    changeLanguage,
+    localStorageData
   }
 })

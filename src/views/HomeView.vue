@@ -141,7 +141,9 @@ const switchLocale = (newLocale) => {
 
 
   onMounted(() => {
-    store.mainDataArr = JSON.parse(localStorage.getItem('database'));
+    if(store.localStorageData) {
+      store.mainDataArr = JSON.parse(localStorage.getItem('database'));
+    }
     document.addEventListener('mousedown', function(event) {
       if(!event.target.classList.contains('right__menu-item')) {
             if(event.which === 1) {
@@ -152,13 +154,16 @@ const switchLocale = (newLocale) => {
 
     setInterval(() => {
       const getArr = JSON.parse(localStorage.getItem('database'));
-      const item = getArr.find(item => item.due_date === store.convertNowToIsoString());
-      if(typeof(item) !== 'undefined') {
-        item.over_due = true;
-        toast(`Task: ${item.name} over due`);
-        localStorage.setItem('database', JSON.stringify(getArr));
-        store.mainDataArr = getArr;
+      if(getArr) {
+        const item = getArr.find(item => item.due_date === store.convertNowToIsoString());
+        if(typeof(item) !== 'undefined') {
+          item.over_due = true;
+          toast(`Task: ${item.name} over due`);
+          localStorage.setItem('database', JSON.stringify(getArr));
+          store.mainDataArr = getArr;
+        }
       }
+   
     }, 1000);
   });
 
