@@ -128,7 +128,12 @@
             flex: 1;
             max-width: 50px;
             background-color: #fff;
-            outline: none;
+            outline: 0;
+
+            &:focus {
+              outline: 0;
+              box-shadow: none;
+            }
         }
       .task__item-check {
        flex: 1

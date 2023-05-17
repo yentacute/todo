@@ -124,7 +124,7 @@ const switchLocale = (newLocale) => {
     store.showRightmenu = true;
     store.currentId = id;
     setTimeout(() => {
-      document.querySelector('.right__menu-container').style.left = x + 'px';
+      document.querySelector('.right__menu-container').style.left = (x - 200) + 'px';
       document.querySelector('.right__menu-container').style.top = y + 'px';
     }, 200);
 
