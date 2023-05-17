@@ -141,9 +141,7 @@ const switchLocale = (newLocale) => {
 
 
   onMounted(() => {
-    if(store.localStorageData) {
       store.mainDataArr = JSON.parse(localStorage.getItem('database'));
-    }
     document.addEventListener('mousedown', function(event) {
       if(!event.target.classList.contains('right__menu-item')) {
             if(event.which === 1) {
