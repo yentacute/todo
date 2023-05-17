@@ -141,7 +141,10 @@ const switchLocale = (newLocale) => {
 
 
   onMounted(() => {
-      store.mainDataArr = JSON.parse(localStorage.getItem('database'));
+    if (localStorage.getItem("database") === null) {
+      localStorage.setItem('database', store.mainDataArr)
+    }
+    store.mainDataArr = JSON.parse(localStorage.getItem('database'));
     document.addEventListener('mousedown', function(event) {
       if(!event.target.classList.contains('right__menu-item')) {
             if(event.which === 1) {
@@ -152,7 +155,6 @@ const switchLocale = (newLocale) => {
 
     setInterval(() => {
       const getArr = JSON.parse(localStorage.getItem('database'));
-      if(getArr) {
         const item = getArr.find(item => item.due_date === store.convertNowToIsoString());
         if(typeof(item) !== 'undefined') {
           item.over_due = true;
@@ -160,8 +162,6 @@ const switchLocale = (newLocale) => {
           localStorage.setItem('database', JSON.stringify(getArr));
           store.mainDataArr = getArr;
         }
-      }
-   
     }, 1000);
   });
 
