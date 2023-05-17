@@ -1,0 +1,167 @@
+.todo__app-form {
+    width: 100%;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+    padding: 24px;
+    margin: 0 auto;
+    form {
+      input {
+        width: 100%;
+        margin-bottom: 12px;
+        height: 42px;
+        line-height: 42px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        outline: none;
+        border-radius: 8px;
+      }
+
+      .todo__app-action {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+          margin: 0 6px;
+        }
+      }
+    }
+    .todo__app-select-date {
+      display: flex;
+      align-items: center;
+
+      .select__date-input {
+        position: relative;
+        margin: 12px 0;
+      }
+
+      span {
+        display: inline-block;
+        margin-left: 6px;
+
+        strong {
+          margin-right: 5px;
+          color: #db4c3f;
+        }
+      }
+
+      input {
+        background-color: #fff;
+        box-shadow: rgb(255, 102, 0) 0px 0px 0px 1px;
+        background-color: #db4c3f;
+        color: #fff;
+        outline: none;
+        border-radius: 5px;
+        font-size: 12px;
+        padding: 5px;
+        width: auto;
+        margin-left: 12px;
+
+        &::-webkit-calendar-picker-indicator {
+            background-color: #fff;
+            padding: 8px;
+            border-radius: 5px;
+        }
+      }
+    }
+  }
+
+  .todo__app {
+    .todo__app-header {
+      display: flex;
+      flex-direction: column;
+
+      @media(min-width: 768px) {
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+      }
+
+      button {
+        margin-bottom: 24px;
+
+        @media(min-width: 768px) {
+          margin-bottom: 0;
+        }
+      }
+
+      .todo__app-header-title {
+        float: left;
+        
+        h2 {
+          color: #db4c3f;
+          text-transform: uppercase;
+          font-weight: 700;
+          font-size: 18px;
+          line-height: calc(18px * 1.333);
+        }
+      }
+    }
+
+
+    .error-message {
+      color: #db4c3f;
+      font-size: 14px;
+    }
+
+    .todo__app-list {
+      position: relative;
+    }
+
+    .todo__app-task-item {
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0px 3px 1px -1px rgb(0, 145, 19), 0px 3px 6px 0px rgba(0, 0, 0, 0.23);
+
+      &.task__item--over-due {
+        box-shadow: 0px 3px 1px -1px rgb(255, 0, 0), 0px 3px 6px 0px rgba(0, 0, 0, 0.23);
+      }
+
+      &:hover {
+          background-color: #eff6fc;
+        }
+
+        button {
+            flex: 1;
+            max-width: 50px;
+            background-color: #fff;
+            outline: none;
+        }
+      .task__item-check {
+       flex: 1
+
+        input {
+          width: 15px;
+          height: 15px;
+        }
+      }
+
+      .task__item-content {
+        flex: 2;
+        font-size: 14px;
+        padding-left: 8px;
+        
+        &.completed >* {
+          text-decoration: line-through;
+        }
+
+        .task__item-description {
+          p {
+            margin-bottom: 5px;
+          }
+        }
+      }
+
+    }
+
+    .todo__app-language {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+  }
+

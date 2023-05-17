@@ -1,9 +1,12 @@
 <template>
     <div class="right__menu-container" v-if="store.showRightmenu">
+        <button class="close">
+            <font-awesome-icon :icon="['fas', 'xmark']" />
+        </button>
         <ul>
-            <li @click="markToCompleted" class="right__menu-item">Mark completed</li>
-            <li @click="editTask" class="right__menu-item">Edit</li>
-            <li @click="deleteTask" class="right__menu-item">Delete</li>
+            <li @click="markToCompleted" class="right__menu-item">{{$t('rightMenu.completed')}}</li>
+            <li @click="editTask" class="right__menu-item" data-toggle="modal" data-target="#exampleModalCenter">{{$t('rightMenu.edit')}}</li>
+            <li @click="deleteTask" class="right__menu-item">{{$t('rightMenu.delete')}}</li>
         </ul>
     </div>
 
@@ -31,6 +34,16 @@
     store.showRightmenu = false;
   }
 
+  function editTask() {
+    store.showRightmenu = false;
+    const arr = JSON.parse(localStorage.getItem('database'));
+    const item = arr.find(obj => obj.id === store.currentId);
+    store.itemObj = item;
+    store.editModel.name = store.itemObj.name;
+    store.editModel.description = store.itemObj.description;
+    store.editModel.due_date = store.convertIsoStringDate(store.itemObj.due_date);
+  }
+
 </script>
 
 <style lang="scss">
@@ -43,6 +56,22 @@
         position: fixed;
         z-index: 999;
         background-color: #fff;
+        right: 0;
+
+        .close {
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            width: 30px;
+            height: 30px;
+            background-color: #ddd;
+            border-radius: 50%;
+           
+            svg {
+                color: #000;
+                width: 15px;
+            }
+        }
         ul {
             padding: 0;
             list-style: none;
