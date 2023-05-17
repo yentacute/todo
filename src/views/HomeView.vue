@@ -142,7 +142,7 @@ const switchLocale = (newLocale) => {
 
   onMounted(() => {
     if (localStorage.getItem("database") === null) {
-      localStorage.setItem('database', store.mainDataArr)
+      localStorage.setItem('database', JSON.stringify(store.mainDataArr))
     }
     store.mainDataArr = JSON.parse(localStorage.getItem('database'));
     document.addEventListener('mousedown', function(event) {
